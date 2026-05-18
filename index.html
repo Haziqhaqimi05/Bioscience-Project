@@ -1,257 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Application of Derivatives in Bioscience</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Microbial Growth Velocity Curves</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#1b0f0a,#3e2723,#5d4037);
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Animated Background */
+body::before{
+    content:'';
+    position:fixed;
+    width:200%;
+    height:200%;
+    background:
+    radial-gradient(circle,#8bc34a33 2px,transparent 2px);
+    background-size:60px 60px;
+    animation:moveBg 20s linear infinite;
+    z-index:-1;
+}
+
+@keyframes moveBg{
+    0%{transform:translate(0,0);}
+    100%{transform:translate(-100px,-100px);}
+}
+
+/* HERO */
+.hero{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:40px;
+}
+
+.hero-content{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:25px;
+    padding:50px;
+    max-width:950px;
+    box-shadow:0 0 30px rgba(0,0,0,0.4);
+    animation:fadeIn 2s ease;
+}
+
+.hero h1{
+    font-size:3rem;
+    margin-bottom:20px;
+    color:#dcedc8;
+}
+
+.hero p{
+    line-height:1.8;
+    font-size:1.1rem;
+    color:#f1f1f1;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Sections */
+.section{
+    padding:80px 10%;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+.section h2{
+    margin-bottom:25px;
+    color:#c5e1a5;
+    font-size:2rem;
+}
+
+.chart-container{
+    margin-top:40px;
+}
+
+.info-box{
+    margin-top:30px;
+    background:#ffffff10;
+    padding:20px;
+    border-radius:15px;
+    border-left:5px solid #aed581;
+}
+
+.highlight{
+    color:#dcedc8;
+    font-weight:bold;
+}
+
+/* Floating bacteria */
+.bacteria{
+    position:fixed;
+    font-size:30px;
+    opacity:0.2;
+    animation:float 12s linear infinite;
+}
+
+.b1{
+    left:10%;
+    animation-duration:10s;
+}
+
+.b2{
+    left:50%;
+    animation-duration:15s;
+}
+
+.b3{
+    left:80%;
+    animation-duration:12s;
+}
+
+@keyframes float{
+    0%{
+        transform:translateY(100vh) rotate(0deg);
+    }
+    100%{
+        transform:translateY(-120vh) rotate(360deg);
+    }
+}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:30px;
+    background:#00000044;
+    margin-top:50px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    background:#aed581;
+    color:#1b1b1b;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    background:#dcedc8;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .hero h1{
+        font-size:2rem;
     }
 
-    body{
-      background: linear-gradient(to right, #1b4332, #081c15);
-      color:white;
-      padding:30px;
+    .hero-content{
+        padding:30px;
     }
-
-    .container{
-      max-width:1200px;
-      margin:auto;
-    }
-
-    .title{
-      text-align:center;
-      margin-bottom:40px;
-    }
-
-    .title h1{
-      font-size:40px;
-      margin-bottom:10px;
-    }
-
-    .title p{
-      font-size:18px;
-      color:#d8f3dc;
-    }
-
-    .card{
-      background: rgba(255,255,255,0.08);
-      border-radius:20px;
-      padding:25px;
-      margin-bottom:30px;
-      backdrop-filter: blur(10px);
-      box-shadow:0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .card h2{
-      margin-bottom:20px;
-      color:#95d5b2;
-    }
-
-    .info-box{
-      line-height:1.8;
-      font-size:17px;
-    }
-
-    canvas{
-      background:white;
-      border-radius:15px;
-      padding:15px;
-    }
-
-    .footer{
-      text-align:center;
-      margin-top:40px;
-      padding:20px;
-      color:#d8f3dc;
-    }
-
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="bacteria b1">🦠</div>
+<div class="bacteria b2">🦠</div>
+<div class="bacteria b3">🦠</div>
 
-    <div class="title">
-      <h1>Application of Derivatives in Bioscience</h1>
-      <p>Microbial Growth Velocity in Cocoa Fermentation Industry in Sabah</p>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>
+            Microbial Growth Velocity Curves of Lactobacillus Strains in Fermented Cocoa Beans
+        </h1>
+
+        <p>
+            This project demonstrates the application of 
+            <span class="highlight">Calculus Derivatives</span> 
+            in bioscience by analysing the growth velocity of 
+            Lactobacillus bacteria during cocoa bean fermentation 
+            in Sabah cocoa estates.
+            <br><br>
+            The derivative function f'(x) is used to determine the 
+            instantaneous rate of microbial growth over time.
+        </p>
+
+        <button onclick="scrollToGraph()">
+            Explore Growth Analysis
+        </button>
     </div>
+</section>
 
+<!-- SECTION -->
+<section class="section" id="graphSection">
     <div class="card">
-      <h2>Bioscience Problem Explanation</h2>
 
-      <div class="info-box">
-        <p>
-          In cocoa fermentation industries in Sabah, monitoring Lactobacillus growth is important to maintain cocoa bean quality.
-          Using derivatives allows scientists to identify the exact rate of microbial growth at specific times.
-          This helps plantation managers improve fermentation efficiency, reduce contamination risks, and ensure consistent cocoa quality.
-        </p>
-
-        <br>
+        <h2>Interactive Growth Velocity Analysis</h2>
 
         <p>
-          Derivative analysis also supports precision agriculture and modern biotechnology systems by providing real-time microbial monitoring.
+            The graph below shows the microbial population growth 
+            over fermentation time. Clicking on any point displays 
+            the estimated growth velocity (derivative).
         </p>
-      </div>
+
+        <div class="chart-container">
+            <canvas id="growthChart"></canvas>
+        </div>
+
+        <div class="info-box" id="infoBox">
+            Click on a graph point to view derivative analysis.
+        </div>
+
     </div>
+</section>
 
+<!-- SECTION -->
+<section class="section">
     <div class="card">
-      <h2>Interactive Derivative Graph</h2>
 
-      <canvas id="growthChart"></canvas>
+        <h2>Application of Derivatives in Bioscience</h2>
+
+        <p style="line-height:1.9;">
+            In bioscience, derivatives are important for measuring 
+            rates of biological changes such as microbial growth, 
+            enzyme reactions, and fermentation efficiency.
+            <br><br>
+
+            In this project:
+            <br><br>
+
+            <span class="highlight">
+            f'(x) = Growth Velocity
+            </span>
+
+            <br><br>
+
+            A higher derivative value indicates rapid bacterial growth,
+            while lower derivative values indicate slower microbial activity.
+            <br><br>
+
+            This helps cocoa producers in Sabah monitor fermentation quality
+            and improve cocoa bean consistency for industrial production.
+        </p>
+
     </div>
+</section>
 
-    <div class="card">
-      <h2>Mathematical Model</h2>
+<footer>
+    2026 Project — Application of Derivatives in Bioscience in Malaysia
+</footer>
 
-      <div class="info-box">
-        <p>
-          Microbial Growth Function:
-        </p>
+<script>
 
-        <br>
+function scrollToGraph(){
+    document.getElementById('graphSection')
+    .scrollIntoView({behavior:'smooth'});
+}
 
-        <p>
-          f(x) = x² + 3x + 2
-        </p>
+/* DATA */
+const labels = [0,4,8,12,16,20,24];
+const population = [5,12,28,60,85,95,100];
+const derivative = [1.75,4,8,6.25,2.5,1.25,0.5];
 
-        <br>
+const ctx = document.getElementById('growthChart');
 
-        <p>
-          Derivative Function:
-        </p>
+const growthChart = new Chart(ctx,{
+    type:'line',
+    data:{
+        labels:labels,
+        datasets:[
+        {
+            label:'Lactobacillus Population',
+            data:population,
+            borderColor:'#dcedc8',
+            backgroundColor:'#aed58155',
+            fill:true,
+            tension:0.4,
+            pointRadius:6,
+            pointHoverRadius:10
+        }]
+    },
 
-        <br>
+    options:{
+        responsive:true,
 
-        <p>
-          f'(x) = 2x + 3
-        </p>
-
-        <br>
-
-        <p>
-          The derivative represents the microbial growth velocity during the fermentation process.
-        </p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Suggested Improvement</h2>
-
-      <div class="info-box">
-        <p>
-          Future improvements may include real-time IoT sensor integration for automatic microbial tracking, AI prediction systems for fermentation quality, and 3D visualization dashboards for estate monitoring.
-        </p>
-      </div>
-    </div>
-
-    <div class="footer">
-      <h3>Prepared by: HAZIQ HAQIMI</h3>
-      <p>Project Application of Derivatives in Bioscience 2026</p>
-    </div>
-
-  </div>
-
-  <script>
-    const ctx = document.getElementById('growthChart').getContext('2d');
-
-    const labels = [0,1,2,3,4,5,6,7,8,9,10];
-
-    const microbialData = labels.map(x => x*x + 3*x + 2);
-
-    const derivativeData = labels.map(x => 2*x + 3);
-
-    const growthChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Microbial Growth f(x)',
-            data: microbialData,
-            borderColor: '#95d5b2',
-            backgroundColor: 'rgba(149,213,178,0.2)',
-            tension: 0.4,
-            fill: true,
-            borderWidth: 4,
-            pointRadius: 5,
-            pointHoverRadius: 8
-          },
-          {
-            label: 'Growth Velocity f\'(x)',
-            data: derivativeData,
-            borderColor: '#ffd166',
-            backgroundColor: 'rgba(255,209,102,0.2)',
-            tension: 0.4,
-            fill: true,
-            borderWidth: 4,
-            pointRadius: 5,
-            pointHoverRadius: 8
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        animation: {
-          duration: 3000,
-          easing: 'easeInOutQuart'
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
         },
-        plugins: {
-          legend: {
-            labels: {
-              color: 'white',
-              font: {
-                size: 14
-              }
+
+        scales:{
+            x:{
+                title:{
+                    display:true,
+                    text:'Fermentation Time (Hours)',
+                    color:'white'
+                },
+                ticks:{
+                    color:'white'
+                },
+                grid:{
+                    color:'#ffffff22'
+                }
+            },
+
+            y:{
+                title:{
+                    display:true,
+                    text:'Bacterial Population',
+                    color:'white'
+                },
+                ticks:{
+                    color:'white'
+                },
+                grid:{
+                    color:'#ffffff22'
+                }
             }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return context.dataset.label + ': ' + context.parsed.y;
-              }
-            }
-          }
         },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Fermentation Time (Days)',
-              color: 'white'
-            },
-            ticks: {
-              color: 'white'
-            },
-            grid: {
-              color: 'rgba(255,255,255,0.1)'
+
+        onClick:(e,activeEls)=>{
+
+            if(activeEls.length > 0){
+
+                const index = activeEls[0].index;
+
+                const hour = labels[index];
+                const pop = population[index];
+                const rate = derivative[index];
+
+                document.getElementById('infoBox')
+                .innerHTML = `
+                <h3 style="margin-bottom:10px;color:#dcedc8;">
+                Derivative Analysis
+                </h3>
+
+                At hour <span class="highlight">${hour}</span>,
+                the Lactobacillus population reached 
+                <span class="highlight">${pop}</span>.
+
+                <br><br>
+
+                Estimated growth velocity:
+                <span class="highlight">
+                f'(x) = ${rate}
+                </span>
+
+                <br><br>
+
+                ${
+                    rate > 5
+                    ?
+                    "Rapid microbial growth detected during active fermentation phase."
+                    :
+                    "Microbial growth is slowing down as fermentation approaches stability."
+                }
+                `;
             }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Microbial Population / Growth Velocity',
-              color: 'white'
-            },
-            ticks: {
-              color: 'white'
-            },
-            grid: {
-              color: 'rgba(255,255,255,0.1)'
-            }
-          }
         }
-      }
-    });
-  </script>
+    }
+});
+
+</script>
 
 </body>
 </html>
