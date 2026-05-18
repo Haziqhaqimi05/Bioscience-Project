@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application of Derivatives in Bioscience</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background: linear-gradient(to right, #1b4332, #081c15);
+      color:white;
+      padding:30px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    .title{
+      text-align:center;
+      margin-bottom:40px;
+    }
+
+    .title h1{
+      font-size:40px;
+      margin-bottom:10px;
+    }
+
+    .title p{
+      font-size:18px;
+      color:#d8f3dc;
+    }
+
+    .card{
+      background: rgba(255,255,255,0.08);
+      border-radius:20px;
+      padding:25px;
+      margin-bottom:30px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .card h2{
+      margin-bottom:20px;
+      color:#95d5b2;
+    }
+
+    .info-box{
+      line-height:1.8;
+      font-size:17px;
+    }
+
+    canvas{
+      background:white;
+      border-radius:15px;
+      padding:15px;
+    }
+
+    .footer{
+      text-align:center;
+      margin-top:40px;
+      padding:20px;
+      color:#d8f3dc;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="title">
+      <h1>Application of Derivatives in Bioscience</h1>
+      <p>Microbial Growth Velocity in Cocoa Fermentation Industry in Sabah</p>
+    </div>
+
+    <div class="card">
+      <h2>Bioscience Problem Explanation</h2>
+
+      <div class="info-box">
+        <p>
+          In cocoa fermentation industries in Sabah, monitoring Lactobacillus growth is important to maintain cocoa bean quality.
+          Using derivatives allows scientists to identify the exact rate of microbial growth at specific times.
+          This helps plantation managers improve fermentation efficiency, reduce contamination risks, and ensure consistent cocoa quality.
+        </p>
+
+        <br>
+
+        <p>
+          Derivative analysis also supports precision agriculture and modern biotechnology systems by providing real-time microbial monitoring.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Interactive Derivative Graph</h2>
+
+      <canvas id="growthChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>Mathematical Model</h2>
+
+      <div class="info-box">
+        <p>
+          Microbial Growth Function:
+        </p>
+
+        <br>
+
+        <p>
+          f(x) = x² + 3x + 2
+        </p>
+
+        <br>
+
+        <p>
+          Derivative Function:
+        </p>
+
+        <br>
+
+        <p>
+          f'(x) = 2x + 3
+        </p>
+
+        <br>
+
+        <p>
+          The derivative represents the microbial growth velocity during the fermentation process.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Suggested Improvement</h2>
+
+      <div class="info-box">
+        <p>
+          Future improvements may include real-time IoT sensor integration for automatic microbial tracking, AI prediction systems for fermentation quality, and 3D visualization dashboards for estate monitoring.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <h3>Prepared by: HAZIQ HAQIMI</h3>
+      <p>Project Application of Derivatives in Bioscience 2026</p>
+    </div>
+
+  </div>
+
+  <script>
+    const ctx = document.getElementById('growthChart').getContext('2d');
+
+    const labels = [0,1,2,3,4,5,6,7,8,9,10];
+
+    const microbialData = labels.map(x => x*x + 3*x + 2);
+
+    const derivativeData = labels.map(x => 2*x + 3);
+
+    const growthChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Microbial Growth f(x)',
+            data: microbialData,
+            borderColor: '#95d5b2',
+            backgroundColor: 'rgba(149,213,178,0.2)',
+            tension: 0.4,
+            fill: true,
+            borderWidth: 4,
+            pointRadius: 5,
+            pointHoverRadius: 8
+          },
+          {
+            label: 'Growth Velocity f\'(x)',
+            data: derivativeData,
+            borderColor: '#ffd166',
+            backgroundColor: 'rgba(255,209,102,0.2)',
+            tension: 0.4,
+            fill: true,
+            borderWidth: 4,
+            pointRadius: 5,
+            pointHoverRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: {
+          duration: 3000,
+          easing: 'easeInOutQuart'
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white',
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + context.parsed.y;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Fermentation Time (Days)',
+              color: 'white'
+            },
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: 'rgba(255,255,255,0.1)'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Microbial Population / Growth Velocity',
+              color: 'white'
+            },
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: 'rgba(255,255,255,0.1)'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
